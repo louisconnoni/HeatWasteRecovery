@@ -50,9 +50,6 @@ def score_metric(value, best, worst):
     return 100 * (worst - value) / (worst - best)
 
 
-PUE: best 1.1 worst 2.0
-CUE: best 0.2 worst 1.2
-WUE: best 0.1 worst 1.5
 
 cue_score = score_metric(metrics["CUE"], 0.2, 1.2)
 pue_score = score_metric(metrics["PUE"], 1.1, 2.0)
