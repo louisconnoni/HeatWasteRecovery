@@ -31,6 +31,12 @@ def read_key_value_file(file):
 
     return data
 
+metrics = read_key_value_file(metrics_file)
+rules = read_key_value_file(rules_file)
+
+st.write("DEBUG — Metrics:", metrics)
+st.write("DEBUG — Rules:", rules)
+
 
 def score_metric(value, best, worst):
     if value >= worst:
