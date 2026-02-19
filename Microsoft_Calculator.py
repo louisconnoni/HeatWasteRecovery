@@ -1,11 +1,13 @@
 import streamlit as st
 
+
+# -----------------------------
+# Functions
+# -----------------------------
 def read_key_value_file(file):
     data = {}
 
-    # 🔴 CRITICAL LINE
     file.seek(0)
-
     content = file.getvalue().decode("utf-8")
     lines = content.splitlines()
 
@@ -31,12 +33,6 @@ def read_key_value_file(file):
 
     return data
 
-metrics = read_key_value_file(metrics_file)
-rules = read_key_value_file(rules_file)
-
-st.write("DEBUG — Metrics:", metrics)
-st.write("DEBUG — Rules:", rules)
-
 
 def score_metric(value, best, worst):
     if value >= worst:
@@ -45,15 +41,26 @@ def score_metric(value, best, worst):
         return 100
     return 100 * (worst - value) / (worst - best)
 
+
+# -----------------------------
+# UI
+# -----------------------------
 st.title("Data Center Sustainability Calculator")
 
 metrics_file = st.file_uploader("Upload Metrics File", type="txt")
 rules_file = st.file_uploader("Upload Rules File", type="txt")
 
+
+# -----------------------------
+# Main Logic
+# -----------------------------
 if metrics_file is not None and rules_file is not None:
 
     metrics = read_key_value_file(metrics_file)
     rules = read_key_value_file(rules_file)
+
+    st.write("DEBUG — Metrics:", metrics)
+    st.write("DEBUG — Rules:", rules)
 
     required_metrics = ["CUE", "PUE", "WUE"]
 
