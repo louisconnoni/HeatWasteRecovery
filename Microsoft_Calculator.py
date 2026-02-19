@@ -2,7 +2,12 @@ import streamlit as st
 
 def read_key_value_file(file):
     data = {}
-    lines = file.read().decode("utf-8").splitlines()
+
+    # 🔴 CRITICAL LINE
+    file.seek(0)
+
+    content = file.getvalue().decode("utf-8")
+    lines = content.splitlines()
 
     for line in lines:
         line = line.strip()
@@ -10,7 +15,10 @@ def read_key_value_file(file):
         if not line or line.startswith("#"):
             continue
 
-        key, value = line.split("=")
+        if "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
         key = key.strip()
         value = value.strip()
 
