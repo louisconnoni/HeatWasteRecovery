@@ -42,7 +42,7 @@ rules_file = st.file_uploader("Upload Rules CSV", type="txt")
 # -----------------------------
 if metrics_file is not None:
 
-    costs = read_upfront_water_costs(metrics_file)
+    costs = read_distance(metrics_file)
 
     st.write("Upfront Water Costs:", costs)
 
