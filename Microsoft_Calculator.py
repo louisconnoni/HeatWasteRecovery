@@ -5,28 +5,20 @@ import io
 # -----------------------------
 # Functions
 # -----------------------------
-def read_csv_key_value_file(file):
-    data = {}
+def read_distance(file):
+    costs = []
 
-    # Streamlit uploads files as bytes → convert to text
     file.seek(0)
     stringio = io.StringIO(file.getvalue().decode("utf-8"))
 
     reader = csv.DictReader(stringio)
 
     for row in reader:
-        key = row["Metric"].strip()
-        value = row["Value"].strip()
+        # Change this to EXACT column name in your CSV
+        cost = float(row["distance, km"])
+        costs.append(cost)
 
-        # convert to number if possible
-        try:
-            value = float(value)
-        except:
-            pass
-
-        data[key] = value
-
-    return data
+    return costs
 
 
 def score_metric(value, best, worst):
@@ -48,35 +40,11 @@ rules_file = st.file_uploader("Upload Rules CSV", type="txt")
 # -----------------------------
 # Main Logic
 # -----------------------------
-if metrics_file is not None and rules_file is not None:
+if metrics_file is not None:
 
-	
+    costs = read_upfront_water_costs(metrics_file)
 
-    metrics = read_csv_key_value_file(metrics_file)
-    rules = read_csv_key_value_file(rules_file)
-
-    st.write("DEBUG — Metrics:", metrics)
-    st.write("DEBUG — Rules:", rules)
-
-
-    required_metrics = ["CUE", "PUE", "WUE"]
-
-    for m in required_metrics:
-        if m not in metrics:
-            st.error(f"Metrics file missing {m}")
-            st.stop()
-
-    cue_score = score_metric(metrics["CUE"], 0.2, 1.2)
-    pue_score = score_metric(metrics["PUE"], 1.1, 2.0)
-    wue_score = score_metric(metrics["WUE"], 0.1, 1.5)
-
-    final_score = (
-        cue_score * rules["weight_CUE"] +
-        pue_score * rules["weight_PUE"] +
-        wue_score * rules["weight_WUE"]
-    )
-
-    st.subheader(f"Final Sustainability Score: {final_score:.2f}/100")
+    st.write("Upfront Water Costs:", costs)
 
 else:
     st.info("Please upload BOTH files to run the calculator.")
