@@ -5,17 +5,20 @@ import io
 # -----------------------------
 # Functions
 # -----------------------------
-def read_distance(file):
+def read_upfront_water_costs(file):
     costs = []
 
     file.seek(0)
     stringio = io.StringIO(file.getvalue().decode("utf-8"))
-
-    reader = csv.DictReader(stringio)
+    reader = csv.reader(stringio)
 
     for row in reader:
-        # Change this to EXACT column name in your CSV
-        cost = float(row["distance, km"])
+        # skip empty rows
+        if not row:
+            continue
+
+        # 6th column (index 5)
+        cost = float(row[5])
         costs.append(cost)
 
     return costs
@@ -42,7 +45,7 @@ rules_file = st.file_uploader("Upload Rules CSV", type="txt")
 # -----------------------------
 if metrics_file is not None:
 
-    costs = read_distance(metrics_file)
+    costs = read_upfront_water_costs(metrics_file)
 
     st.write("Upfront Water Costs:", costs)
 
