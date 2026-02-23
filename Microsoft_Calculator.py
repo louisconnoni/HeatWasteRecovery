@@ -1,29 +1,24 @@
 import streamlit as st
 
-
+import csv
+import io
 # -----------------------------
 # Functions
 # -----------------------------
-def read_key_value_file(file):
+def read_csv_key_value_file(file):
     data = {}
 
+    # Streamlit uploads files as bytes → convert to text
     file.seek(0)
-    content = file.getvalue().decode("utf-8")
-    lines = content.splitlines()
+    stringio = io.StringIO(file.getvalue().decode("utf-8"))
 
-    for line in lines:
-        line = line.strip()
+    reader = csv.DictReader(stringio)
 
-        if not line or line.startswith("#"):
-            continue
+    for row in reader:
+        key = row["Metric"].strip()
+        value = row["Value"].strip()
 
-        if "=" not in line:
-            continue
-
-        key, value = line.split("=", 1)
-        key = key.strip()
-        value = value.strip()
-
+        # convert to number if possible
         try:
             value = float(value)
         except:
@@ -47,17 +42,16 @@ def score_metric(value, best, worst):
 # -----------------------------
 st.title("Data Center Sustainability Calculator")
 
-metrics_file = st.file_uploader("Upload Metrics File", type="txt")
-rules_file = st.file_uploader("Upload Rules File", type="txt")
-
+metrics_file = st.file_uploader("Upload Metrics CSV", type="csv")
+rules_file = st.file_uploader("Upload Rules CSV", type="csv")
 
 # -----------------------------
 # Main Logic
 # -----------------------------
 if metrics_file is not None and rules_file is not None:
 
-    metrics = read_key_value_file(metrics_file)
-    rules = read_key_value_file(rules_file)
+	metrics = read_csv_key_value_file(metrics_file)
+	rules = read_csv_key_value_file(rules_file)
 
     st.write("DEBUG — Metrics:", metrics)
     st.write("DEBUG — Rules:", rules)
