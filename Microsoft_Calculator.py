@@ -50,11 +50,14 @@ rules_file = st.file_uploader("Upload Rules CSV", type="csv")
 # -----------------------------
 if metrics_file is not None and rules_file is not None:
 
-	metrics = read_csv_key_value_file(metrics_file)
-	rules = read_csv_key_value_file(rules_file)
+	
+
+    metrics = read_csv_key_value_file(metrics_file)
+    rules = read_csv_key_value_file(rules_file)
 
     st.write("DEBUG — Metrics:", metrics)
     st.write("DEBUG — Rules:", rules)
+
 
     required_metrics = ["CUE", "PUE", "WUE"]
 
