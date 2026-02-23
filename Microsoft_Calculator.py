@@ -43,7 +43,7 @@ def score_metric(value, best, worst):
 st.title("Data Center Sustainability Calculator")
 
 metrics_file = st.file_uploader("Upload Metrics CSV", type="csv")
-rules_file = st.file_uploader("Upload Rules CSV", type="csv")
+rules_file = st.file_uploader("Upload Rules CSV", type="txt")
 
 # -----------------------------
 # Main Logic
